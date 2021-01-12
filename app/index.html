@@ -6,24 +6,16 @@
 </head>
 <body>
 <h1>Basic SMART Sample</h1>
-<p><strong>Patient Name:</strong> <span id="firstname"></span> <span id="lastname"></span></p>
+<p><strong>Patient Name:</strong> <span id="fname"></span> <span id="lname"></span></p>
 
 <script src="./src/js/simple.js"></script>
 <script src="lib/fhir-client.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
-    extractData().then(
-        //Display Patient Demographics and Observations if extractData was success
-        function(p) {
-            drawVisualization(p);
-        },
-
-        //Display 'Failed to call FHIR Service' if extractData failed
-        function() {
-            $('#loading').hide();
-            $('#errors').html('<p> Failed to call FHIR Service </p>');
-        }
-    );
+    FHIR.oauth2.ready()
+        .then(client => client.request("Patient"))
+        .then(console.log)
+        .catch(console.error);
 </script>
 
 </body>
