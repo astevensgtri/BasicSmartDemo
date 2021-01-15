@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Cerner Launch Context</title>
+    <title>Cerner Launch</title>
 </head>
 <body>
-<script src="lib/fhir-client.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fhirclient@2.3.10/build/fhir-client.js"></script>
 <script>
     FHIR.oauth2.authorize({
-        'client_id': 'aeb8989b-49fc-4ba8-aaa0-390df3ddd543',
-        'scope':  'patient/Patient.read patient/Observation.read launch online_access openid profile'
+        'client_id': 'Place your Cerner client ID Here.',
+        'scope':  'patient/Patient.read launch online_access openid profile'
     });
 </script>
 </body>
