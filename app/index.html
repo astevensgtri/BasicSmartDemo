@@ -3,13 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <title>Basic SMART Sample</title>
+    <link rel='stylesheet' type='text/css' href='./css/app.css'>
+
 </head>
 <body>
 <h1>Basic SMART Sample</h1>
-<p><strong>Patient Name:</strong> <span id="first"></span> <span id="last"></span></p>
 
+<div>
+    <h2>Patient Demographics</h2>
+    <sub><a href="https://www.hl7.org/fhir/patient.html" target="_blank">Patient FHIR Resource</a></sub>
+    <p>
+        <strong>Patient Name:</strong> <span id="name"></span><br>
+        <strong>Gender:</strong> <span id="gender"></span><br>
+        <strong>Birthdate:</strong> <span id="birthdate"></span>
+    </p>
+</div>
+
+<div class="flex-container">
+    <div class="flex-child">
+        <h2>Conditions</h2>
+        <sub><a href="https://www.hl7.org/fhir/condition.html" target="_blank">Condition FHIR Resource</a></sub>
+        <ul id="conditions"></ul>
+    </div>
+
+    <div class="flex-child">
+        <h2>Medication Requests</h2>
+        <sub><a href="https://www.hl7.org/fhir/medicationrequest.html" target="_blank">MedicationRequest FHIR
+            Resource</a></sub>
+        <ul id="medicationRequests"></ul>
+    </div>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/fhirclient@2.3.10/build/fhir-client.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="./js/fhir-demonstration.js"></script>
 <script>
     FHIR.oauth2.ready()
         .then(
@@ -18,11 +44,37 @@
                     .then(
                         result => {
                             var patient = result;
+
+                            // Log the Patient to the console to demonstrate structure.
                             console.log(patient);
-                            var last = patient.name[0].family;
-                            var first = patient.name[0].given[0];
-                            document.getElementById("first").innerText = first;
-                            document.getElementById("last").innerText = last;
+
+                            // Display Patient demographic information.
+                            displayPatientDemographics(patient);
+
+                            // Fetch the Patient's Conditions from the server.
+                            client.patient.request("Condition").then(
+                                result => {
+                                    var conditionBundle = result;
+
+                                    // Log the Condition Bundle to the console to demonstrate structure.
+                                    console.log(conditionBundle);
+
+                                    // Display Conditions
+                                    displayConditions(conditionBundle);
+                                }
+                            );
+
+                            client.patient.request("MedicationRequest").then(
+                                result => {
+                                    var medicationRequestBundle = result;
+
+                                    // Log the MedicationRequest Bundle to the console to demonstrate structure.
+                                    console.log(medicationRequestBundle);
+
+                                    // Display MedicationRequests
+                                    displayMedicationRequests(medicationRequestBundle);
+                                }
+                            )
                         }
                     );
             }

@@ -8,8 +8,9 @@
 <script src="https://cdn.jsdelivr.net/npm/fhirclient@2.3.10/build/fhir-client.js"></script>
 <script>
     FHIR.oauth2.authorize({
-        'client_id': 'Place your Epic client ID here.',
-        'scope':  'patient/Patient.read launch online_access openid profile'
+        //'client_id': 'Place your Epic client ID here.',
+        'client_id': '6c12dff4-24e7-4475-a742-b08972c4ea27',
+        'scope':  'patient/Patient.read patient/Condition.read launch online_access openid profile'
     });
 </script>
 </body>
