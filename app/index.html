@@ -62,7 +62,7 @@
                                     // Display Conditions
                                     displayConditions(conditionBundle);
                                 }
-                            );
+                            ).catch(console.error);
 
                             client.patient.request("MedicationRequest").then(
                                 result => {
@@ -74,7 +74,7 @@
                                     // Display MedicationRequests
                                     displayMedicationRequests(medicationRequestBundle);
                                 }
-                            )
+                            ).catch(console.error)
                         }
                     );
             }
