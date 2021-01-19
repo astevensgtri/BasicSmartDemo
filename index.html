@@ -13,10 +13,14 @@
         <h1>SMART on FHIR Tutorial</h1>
     </div>
     <div id="menu">
-        Introduction<br><br>
+        Introduction<br><br><br>
+        <u>Your First SMART App</u><br><br>
         Getting Started<br><br>
         Publish your Application<br><br>
-        Sandbox EHR/Provider Launch<br><br>
+        EHR/Provider Launch<br><br><br>
+        <u>Launch Contexts</u><br><br>
+        <u>Client Examples</u><br><br>
+
 
     </div>
     <div id="content">
@@ -106,8 +110,11 @@
             </li>
         </ul>
 
-        <h2>Getting Started</h2>
+        <h1>Part 1 - Your First SMART App</h1>
 
+        The first thing we will do is walk you through getting our sample application up and running
+
+        <h2>Getting Started</h2>
         <h3>Clone/Fork The Repository</h3>
         <p>
             The very first thing you should do is clone or fork this repository to your own GitHub account.
@@ -168,7 +175,8 @@
                 may download or clone the repository locally and then push it to your own repo from there.
             </li>
             <li>
-                In your repo, go to "Settings". You will be taken to the main "Options" section of the repository settings. If you are not here, select
+                In your repo, go to "Settings". You will be taken to the main "Options" section of the repository
+                settings. If you are not here, select
                 "Options" on the left.
             </li>
             <li>
@@ -202,14 +210,48 @@
             structure means the root will be this tutorial, so you would access the application via
             something such as "http://127.0.0.1:8080/app".
         </p>
+        <p>
+            Please be aware that hosting your application locally may not work properly with some sandboxes, causing
+            issues
+            with the redirect URI. This is predominantly a means for quick local testing with open sandboxes to avoid
+            issues with GitHub Pages build limits.
+        </p>
 
-        <h2>Sandboxes EHR/Provider Launch</h2>
+        <h2>Sandbox EHR/Provider Launch</h2>
         The following instructions demonstrate performing a provider launch, such as through an EHR.
         <h3>Cerner</h3>
         <h3>Epic</h3>
-        <h3>SMART</h3>
+        <h3>SMART Health IT Launcher</h3>
         <p>
-            The SMART Health IT launcher provides a simple, open means to test your application.
+            The SMART Health IT Launcher provides a open endpoint with which test your application that is less
+            restrictive than the Epic and Cerner sandboxes.
+        </p>
+        <h4>Steps to Launch</h4>
+        <ol>
+            <li>
+                Navigate to the launcher at
+                <a href="https://launch.smarthealthit.org/" target="_blank">
+                    https://launch.smarthealthit.org/</a></li>
+            <li>Select the following options:
+            <ul>
+                <li><strong>Launch Type:</strong> Provider EHR Launch</li>
+                <li><strong>FHIR Version:</strong> R4 (See below regarding dstu2)</li>
+                <li><strong>Patient:</strong> Select any patient or leave blank.</li>
+                <li><strong>Provider:</strong> Select any provider or leave blank.</li>
+            </ul>
+            </li>
+        </ol>
+        <p>
+            If you have any issues, try disabling the "Simulate launch within the EHR user interface" option under
+            Launch Type. You are also able to open the sample application with the dstu2 endpoint. Dstu3 works as well,
+            though will not display any medications.
+        </p>
+        <p>
+            <img src="./images/smart-health-it-launcher.jpeg" alt="SMART Health IT Launch Settings">
+        </p>
+        <p>
+            It is recommended to use the patient browser to find a patient on the Sandbox that includes Condition resources,
+            MedicationRequest resources (or MedicationStatement for dstu2 launches) and Observation resources relating to weight and height.
         </p>
     </div>
 </div>
