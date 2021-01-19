@@ -97,7 +97,8 @@ function displayMedicationRequestsR4(client) {
 // found returns the first name in the array as a fallback.
 function findOfficialName(humanNameArray) {
     humanNameArray.forEach(name => {
-        console.log(name)
+        console.log(name);
+        console.log(name.use);
         if (name.use === 'official') return name;
     });
 }
