@@ -8,8 +8,10 @@ function displayPatientDemographics(client) {
                 // Log the Patient to the console to demonstrate structure.
                 console.log(patient);
 
+                var officialName = findOfficialName(patient.name);
+
                 // Set the Patient's information in the DOM.
-                document.getElementById('name').innerText = getFullNameAsString(patient.name[0]);
+                document.getElementById('name').innerText = getFullNameAsString(officialName);
                 document.getElementById('gender').innerText = patient.gender;
                 document.getElementById('birthdate').innerText = patient.birthDate;
             })
@@ -87,6 +89,15 @@ function displayMedicationRequestsR4(client) {
         // Then hide the Medication Statement container as we aren't using it.
         .then(document.getElementById('medorder-container').style.display = 'none')
         .catch(console.error);
+}
+
+// Quick helper function to find the (first?) instance of a HumanName with use of official, if none is
+// found returns the first name in the array as a fallback.
+function findOfficialName(humanNameArray) {
+    humanNameArray.forEach(name => {
+        if (name.use === 'official') return name;
+    });
+    return humanNameArray[0];
 }
 
 // Helper function to parse a full name from the FHIR HumanName type.
