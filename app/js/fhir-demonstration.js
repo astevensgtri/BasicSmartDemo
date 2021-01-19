@@ -9,6 +9,8 @@ function displayPatientDemographics(client) {
                 console.log(patient);
 
                 var officialName = findOfficialName(patient.name);
+                if (officialName === undefined) officialName = patient.name[0];
+                console.log(officialName);
 
                 // Set the Patient's information in the DOM.
                 document.getElementById('name').innerText = getFullNameAsString(officialName);
@@ -98,7 +100,6 @@ function findOfficialName(humanNameArray) {
         console.log(name)
         if (name.use === 'official') return name;
     });
-    return humanNameArray[0];
 }
 
 // Helper function to parse a full name from the FHIR HumanName type.
