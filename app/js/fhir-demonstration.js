@@ -1,45 +1,109 @@
+function displayPatientDemographics(client) {
 
+    // Request full Patient resource.
 
-function displayPatientDemographics(patient) {
-    // Parse the first element of the name array into a single string.
-    var fullName = getFullNameAsString(patient.name[0]);
+    client.patient.read()
+        .then(patient => {
 
-    // Set the Patient's information in the HTML.
-    document.getElementById('name').innerText = fullName;
-    document.getElementById('gender').innerText = patient.gender;
-    document.getElementById('birthdate').innerText = patient.birthDate;
-}
+                // Log the Patient to the console to demonstrate structure.
+                console.log(patient);
 
-function displayConditions(conditionBundle) {
-    var conditionElement = document.getElementById('conditions');
-
-    conditionBundle.entry.forEach(
-        entry => {
-            var conditionDisplay = entry.resource.code.coding[0].display;
-            conditionElement.innerHTML += '<li>' + conditionDisplay + '</li>';
-        });
-}
-
-function displayMedicationRequests(medicationRequestBundle) {
-    var medicationRequestElement = document.getElementById('medicationRequests');
-
-    medicationRequestBundle.entry.forEach(
-        entry => {
-            var medicationRequestDisplay = entry.resource.medicationCodeableConcept.coding[0].display;
-            medicationRequestElement.innerHTML += '<li>' + medicationRequestDisplay + '</li>';
-    });
+                // Set the Patient's information in the DOM.
+                document.getElementById('name').innerText = getFullNameAsString(patient.name[0]);
+                document.getElementById('gender').innerText = patient.gender;
+                document.getElementById('birthdate').innerText = patient.birthDate;
+            })
+        .catch(console.error);
 }
 
 
-// Helper method to parse a full name from the FHIR HumanName type.
+function displayPatientObservations(client) {
+
+    // Fetch specific Observations by LOINC Codes. Note that performing the request from the patient as shown and not
+    // the client directly will automatically handle wrapping the query with the patient's ID.
+
+    client.patient.request("Observation?code=http://loinc.org|29463-7")
+        .then(result => {
+                document.getElementById('pt_weight').innerText = getValueAndUnit(result.entry[0].resource.valueQuantity);
+            })
+        .catch(console.error);
+
+    client.patient.request("Observation?code=http://loinc.org|8302-2")
+        .then(result => {
+                document.getElementById('pt_height').innerText = getValueAndUnit(result.entry[0].resource.valueQuantity);
+            })
+        .catch(console.error);
+}
+
+
+function displayConditions(client) {
+
+    // Fetch the Patient's Conditions from the server.
+
+    client.patient.request("Condition")
+        .then(conditionBundle => {
+                var conditionElement = document.getElementById('conditions');
+                conditionBundle.entry
+                    .forEach(entry => {
+                        var conditionDisplay = entry.resource.code.coding[0].display;
+                        conditionElement.innerHTML += '<li>' + conditionDisplay + '</li>';
+                    });
+            })
+        .catch(console.error);
+}
+
+
+function displayMedicationOrderDstu2(client) {
+
+    // Fetch the Medication Statements from the server.
+
+    client.patient.request("MedicationOrder")
+        .then(medicationOrderBundle => {
+            var medicationElement = document.getElementById('medicationOrders');
+            medicationOrderBundle.entry
+                .forEach(entry => {
+                    var medicationDisplay = entry.resource.medicationCodeableConcept.coding[0].display;
+                    medicationElement.innerHTML += '<li>' + medicationDisplay + '</li>';
+                });
+        })
+        // Then hide the Medication Request container as we aren't using it.
+        .then(document.getElementById('medreq-container').style.display = 'none')
+        .catch(console.error);
+}
+
+function displayMedicationRequestsR4(client) {
+
+    // Fetch the Medication Requests from the server.
+    client.patient.request("MedicationRequest")
+        // Call the function to handle Medication Requests.
+        .then(medicationRequestBundle => {
+            var medicationRequestElement = document.getElementById('medicationRequests');
+            medicationRequestBundle.entry.forEach(
+                entry => {
+                    var medicationRequestDisplay = entry.resource.medicationCodeableConcept.coding[0].display;
+                    medicationRequestElement.innerHTML += '<li>' + medicationRequestDisplay + '</li>';
+                });
+        })
+        // Then hide the Medication Statement container as we aren't using it.
+        .then(document.getElementById('medorder-container').style.display = 'none')
+        .catch(console.error);
+}
+
+// Helper function to parse a full name from the FHIR HumanName type.
 function getFullNameAsString(humanName) {
     var fullName = "";
-    console.log(humanName);
 
-    if (humanName.prefix != undefined) humanName.prefix.forEach(prefix => fullName += prefix + " ");
-    if (humanName.given != undefined) humanName.given.forEach(given => fullName += given + " ");
-    if (humanName.family != undefined) fullName += humanName.family;
-    if (humanName.suffix != undefined) humanName.suffix.forEach(suffix => fullName += " " + suffix);
+    if (humanName.prefix !== undefined) humanName.prefix.forEach(prefix => fullName += prefix + " ");
+    if (humanName.given !== undefined) humanName.given.forEach(given => fullName += given + " ");
+    if (humanName.family !== undefined) fullName += humanName.family;
+    if (humanName.suffix !== undefined) humanName.suffix.forEach(suffix => fullName += " " + suffix);
 
     return fullName;
+}
+
+// Helper function to parse a value and unit of measurement from Observation valueQuantity.
+function getValueAndUnit(valueQuantity) {
+    var value = valueQuantity.value;
+    var unit = valueQuantity.unit;
+    return value + " " + unit;
 }

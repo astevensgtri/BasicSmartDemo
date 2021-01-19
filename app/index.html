@@ -10,12 +10,16 @@
 <h1>Basic SMART Sample</h1>
 
 <div>
-    <h2>Patient Demographics</h2>
+    <h2>Patient Demographics and Observations</h2>
     <sub><a href="https://www.hl7.org/fhir/patient.html" target="_blank">Patient FHIR Resource</a></sub>
+    <sub><a href="https://www.hl7.org/fhir/observation.html" target="_blank">Observation FHIR Resource</a></sub>
+
     <p>
         <strong>Patient Name:</strong> <span id="name"></span><br>
         <strong>Gender:</strong> <span id="gender"></span><br>
-        <strong>Birthdate:</strong> <span id="birthdate"></span>
+        <strong>Birthdate:</strong> <span id="birthdate"></span><br>
+        <strong>Height (Observation):</strong> <span id="pt_height"></span><br>
+        <strong>Weight (Observation):</strong> <span id="pt_weight"></span><br>
     </p>
 </div>
 
@@ -26,11 +30,19 @@
         <ul id="conditions"></ul>
     </div>
 
-    <div class="flex-child">
-        <h2>Medication Requests</h2>
+    <div class="flex-child" id="medreq-container">
+        <h2>Medication Requests (R4)</h2>
         <sub><a href="https://www.hl7.org/fhir/medicationrequest.html" target="_blank">MedicationRequest FHIR
             Resource</a></sub>
         <ul id="medicationRequests"></ul>
+    </div>
+    <div class="flex-child" id="medorder-container">
+        <h2>Medication Orders (dstu2)</h2>
+        <sub><a href="http://hl7.org/fhir/DSTU2/MedicationOrder.html" target="_blank">MedicationOrder (dstu2)
+            FHIR
+            Resource</a></sub>
+        <ul id="medicationOrders"></ul>
+
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/fhirclient@2.3.10/build/fhir-client.js"></script>
@@ -40,43 +52,22 @@
     FHIR.oauth2.ready()
         .then(
             client => {
-                client.request("Patient/" + client.patient.id)
-                    .then(
-                        result => {
-                            var patient = result;
+                displayPatientDemographics(client);
+                displayPatientObservations(client);
+                displayConditions(client);
 
-                            // Log the Patient to the console to demonstrate structure.
-                            console.log(patient);
-
-                            // Display Patient demographic information.
-                            displayPatientDemographics(patient);
-
-                            // Fetch the Patient's Conditions from the server.
-                            client.patient.request("Condition").then(
-                                result => {
-                                    var conditionBundle = result;
-
-                                    // Log the Condition Bundle to the console to demonstrate structure.
-                                    console.log(conditionBundle);
-
-                                    // Display Conditions
-                                    displayConditions(conditionBundle);
-                                }
-                            ).catch(console.error);
-
-                            client.patient.request("MedicationRequest").then(
-                                result => {
-                                    var medicationRequestBundle = result;
-
-                                    // Log the MedicationRequest Bundle to the console to demonstrate structure.
-                                    console.log(medicationRequestBundle);
-
-                                    // Display MedicationRequests
-                                    displayMedicationRequests(medicationRequestBundle);
-                                }
-                            ).catch(console.error)
-                        }
-                    );
+                // Handle Medication based on FHIR Version
+                client.getFhirRelease()
+                    .then(version => {
+                            if (version === 2) {
+                                displayMedicationOrderDstu2(client);
+                            } else if (version === 4) {
+                                displayMedicationRequestsR4(client);
+                            } else {
+                                throw "Unsupported FHIR Version";
+                            }
+                        })
+                    .catch(console.error);
             }
         )
         .catch(console.error);

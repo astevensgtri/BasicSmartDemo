@@ -1,0 +1,57 @@
+body {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    color:#333;
+    align-content: center;
+    background: #212628;
+}
+
+h1 {
+    text-align: center;
+}
+p {
+    padding: 10px;
+}
+
+div {
+    padding: 5px;
+}
+
+#wrapper {
+    margin: auto;
+    width: 1000px;
+}
+
+#header {
+    float: left;
+    height: 75px;
+    width: 990px;
+    background: #E8E9EB;
+    text-align: center;
+}
+
+h2 {
+    padding: 20px;
+    border: 2px solid black;
+    width: auto;
+    margin: 15px;
+    background: whitesmoke;
+}
+h2:not(:first-child) {
+    margin-top: 40px;
+}
+#content {
+    background: white;
+    float: left;
+    width: 840px;
+}
+
+#menu {
+    background: #E0DFD5;
+    width: 140px;
+    float: left;
+}
+
+code {
+    margin: 10px;
+}

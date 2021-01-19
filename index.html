@@ -3,23 +3,215 @@
 <head>
     <meta charset="UTF-8">
     <title>Getting started with SMART on FHIR</title>
+    <link rel='stylesheet' type='text/css' href='./css/tutorial.css'>
+
 </head>
 <body>
-<h1>SMART on FHIR Tutorial</h1>
-<h2>Introduction</h2>
-<p>Note: This tutorial attempts to utilize simple, easily readable code for demonstration purposes and is not intended to be indicative
-of JavaScript best practices.</p>
 
-<h3>Requirements</h3>
+<div id="wrapper">
+    <div id="header">
+        <h1>SMART on FHIR Tutorial</h1>
+    </div>
+    <div id="menu">
+        Introduction<br><br>
+        Getting Started<br><br>
+        Publish your Application<br><br>
+        Sandbox EHR/Provider Launch<br><br>
 
-<p></p>
+    </div>
+    <div id="content">
+        <h2>Introduction</h2>
 
-<h3>Resources</h3>
-<p>Cerner SMART on FHIR Tutorial</p>
+        <p>
+            This tutorial will walk the reader through the basics of creating a SMART on FHIR application and deploying
+            that application to various FHIR sandbox environments, covering Cerner, Epic, and SMART.
+        </p>
 
-<h2>Deploying your Application</h2>
-<h3>GitHub Pages Deployment</h3>
-<h3>Local Deployment with NPM HTTP Server</h3>
-npm install http-server -g
+        <p>
+            This tutorial is inspired by the Cerner SMART on FHIR tutorial, taking cues from their work in terms of
+            project
+            structure and overall approach to demonstrating SMART on FHIR while attempting to create an updated, vendor
+            agnostic look at SMART on FHIR applications. Key differences between this tutorial and the Cerner version
+            include:
+        </p>
+        <ul>
+            <li>
+                Utilizing the 2.3.10 version of the SMART JavaScript Client library, which features a major change from
+                the 1.x version included in the Cerner tutorial. For more information, see the following section
+                regarding Fhir.js.
+            </li>
+            <li>
+                Provides FHIR R4 examples in addition to dstu2, as well as version detection using the client.
+            </li>
+            <li>
+                Simplified JavaScript which may be more easily understood by developers inexperienced with JavaScript or
+                jQuery. (Note: Because of this, code should not be considered indicative of JavaScript best
+                practices.)
+            </li>
+            <li>
+                Provides instructions for testing with Epic's sandbox using LaunchPad.
+            </li>
+
+        </ul>
+        <h3>SMART JS Client 1.x vs 2.x - Fhir.js</h3>
+        <p>
+            Early versions of the SMART JS client included integration with the Fhir.js library, which is reflected in
+            the
+            Cerner tutorial example code. The primary loss here is the use of some API calls, which must reproduced
+            using
+            the SMART JS Client request function.
+        </p>
+        <p>
+            For example, the Cerner code includes the line "smart.patient.api.fetchAll({type: 'Observation',...})"
+            utilizing the Fhir.js API element.
+            To do similar using the SMART JS client, you could simply
+        </p>
+        <p>
+            For more on this issue, you can read the SMART JS documentation <a
+                href="http://docs.smarthealthit.org/client-js/#fhirjs-integration">here</a>.
+        </p>
+        <h3>Prerequisites and Recommendations</h3>
+        <ul>
+            <li>
+                You should have at least a basic understanding of working with FHIR Resources and Bundles, though the
+                code was written in an attempt to be accessible to FHIR novices.
+            </li>
+            <li>
+                In order to deploy to GitHub Pages for some demonstrations, you are required to have a
+                <a href="http://www.github.com" target="_blank">GitHub</a> account.
+                (Setting up any other accounts required will be discussed as part of the tutorial itself.)
+            </li>
+        </ul>
+        <ul>
+            <li>
+                For local testing, it is also recommended that you have an IDE of your choice and NPM installed with
+                http-server. Http-server
+                provides an excellent means of serving content on your local machine without having to worry about GH
+                Page's
+                hourly build limits.
+            </li>
+        </ul>
+
+        <h3>Resources</h3>
+        <ul>
+            <li>
+                <a href="https://engineering.cerner.com/smart-on-fhir-tutorial/" target="_blank">Cerner SMART on FHIR
+                    Tutorial</a></li>
+            <li>
+                <a href="http://docs.smarthealthit.org/client-js/" target="_blank">SMART JS Client Library
+                    Documentation</a>
+            </li>
+            <li>
+                <a href="http://hl7.org/fhir/" target="_blank">FHIR Specification</a>
+            </li>
+        </ul>
+
+        <h2>Getting Started</h2>
+
+        <h3>Clone/Fork The Repository</h3>
+        <p>
+            The very first thing you should do is clone or fork this repository to your own GitHub account.
+        </p>
+
+        <h3>Tutorial and Sample Application Project Structure</h3>
+        <p>
+            This project is structured such that the static tutorial pages are found in the root directory while the
+            sample application resides at "/app". Accessing the root will bring you to this page. This is important to
+            keep in mind once you begin configuring your launch and redirect uris, as you must ensure you base
+            everything
+            off of the "/app" path. E.g. http://some-host/app/launch.html instead of http://some-host/launch.html.
+        </p>
+        <p>
+            The application "/app" folder includes six files:
+        </p>
+        <ul>
+            <li>
+                ./index.html - This is the primary application content page which will be your redirect location. This
+                file includes the script tag needed to handle the SMART Oauth2 authorization and subsequent resource
+                requests.
+            </li>
+            <li>
+                ./launch-cerner.html - This is an R4 launch page intended for use with the Cerner R4 sandbox. It sets
+                the scope to include "patient/MedicationRequest.read" to be compatible with R4 FHIR structures. (Scopes
+                will be discussed in more detail momentarily.)
+            </li>
+            <li>
+                ./launch-epic.html - This is the dstu2 launch page intended for use with Epic and dstu2 FHIR servers. In
+                place of the MedicationRequest resource, it sets scope for MedicationOrder.
+            </li>
+            <li>
+                ./launch.html - This is a convenience file include for use with any other sandboxes you wish to test,
+                allowing you to maintain distinct launch contexts for multiple simultaneously. It includes commented
+                out versions of the scopes for both dstu2 and R4.
+            </li>
+            <li>
+                ./css/app.css - This is just your friendly neighborhood CSS styling so the sample application isn't too
+                hideous to look at.
+            </li>
+            <li>
+                ./js/fhir-demonstration.js - This is the core JavaScript used in the application. It consists of a
+                series
+                of basic functions that demonstrate how to use the client to request data from the FHIR server.
+            </li>
+        </ul>
+
+        <h2>Publish your Application</h2>
+        <h3>GitHub Pages</h3>
+        <p>
+            GitHub Pages is the recommended means of standing up your application for use on SMART sandboxes.
+            Here we will go through the steps needed to get up and running.
+        </p>
+        <ol>
+            <li>
+                If you haven't, fork this repository to your own GitHub account. You may do so using the
+                "Fork" option in the top right corner of the GitHub browser interface. Alternatively, you
+                may download or clone the repository locally and then push it to your own repo from there.
+            </li>
+            <li>
+                In your repo, go to "Settings". You will be taken to the main "Options" section of the repository settings. If you are not here, select
+                "Options" on the left.
+            </li>
+            <li>
+                Scroll down until you see "GitHub Pages". Under "Source" select the branch you would like to
+                use. If you wish to create a branch specific to your GH Pages deployment, you can push your live
+                code to that branch and then select it here. Otherwise, just choose "master". Leave the folder option
+                as "/ (root)". Click "Save" when ready.
+            </li>
+            <li>
+                Your code will now be published at:<br>
+                https://[your-user-name].github.io/BasicSmartDemo/<br>
+                Keep in mind that this specific link will take you to this tutorial, <em>not</em> your
+                application given the project structure. Your application can be found at:<br>
+                https://[your-user-name].github.io/BasicSmartDemo/app/
+            </li>
+        </ol>
+
+        <p>And you're all done!</p>
+
+        <h3>Publish Locally with http-server</h3>
+        <p>
+            http-server provides a simple way to publish a local HTTP server for testing purposes.
+            For more information, you can view http-server on their NPM directory page
+            <a href="https://www.npmjs.com/package/http-server" target="_blank">here</a>.
+        </p>
+        <p>The simplest means to install http-server is using NPM, with the line:<br>
+            <code>npm install --global http-server</code><br>
+            In the project directory, you can then start the server with just:<br>
+            <code>http-server</code><br>
+            You will be given a list of IPs which you can access the server from. Remember the project
+            structure means the root will be this tutorial, so you would access the application via
+            something such as "http://127.0.0.1:8080/app".
+        </p>
+
+        <h2>Sandboxes EHR/Provider Launch</h2>
+        The following instructions demonstrate performing a provider launch, such as through an EHR.
+        <h3>Cerner</h3>
+        <h3>Epic</h3>
+        <h3>SMART</h3>
+        <p>
+            The SMART Health IT launcher provides a simple, open means to test your application.
+        </p>
+    </div>
+</div>
 </body>
 </html>
