@@ -9,7 +9,6 @@ function displayPatientDemographics(client) {
                 console.log(patient);
 
                 var officialName = findOfficialName(patient.name);
-                if (officialName === undefined) officialName = patient.name[0];
                 console.log(officialName);
 
                 // Set the Patient's information in the DOM.
@@ -96,11 +95,15 @@ function displayMedicationRequestsR4(client) {
 // Quick helper function to find the (first?) instance of a HumanName with use of official, if none is
 // found returns the first name in the array as a fallback.
 function findOfficialName(humanNameArray) {
+    var officialName = humanNameArray[0];
     humanNameArray.forEach(name => {
-        console.log(name);
-        console.log(name.use);
-        if (name.use === 'official') return name;
+        if (name.use === 'official') {
+            console.log("Found Official");
+            console.log(name);
+            officialName = name;
+        }
     });
+    return officialName;
 }
 
 // Helper function to parse a full name from the FHIR HumanName type.
