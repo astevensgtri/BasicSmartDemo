@@ -98,8 +98,6 @@ function findOfficialName(humanNameArray) {
     var officialName = humanNameArray[0];
     humanNameArray.forEach(name => {
         if (name.use === 'official') {
-            console.log("Found Official");
-            console.log(name);
             officialName = name;
         }
     });
