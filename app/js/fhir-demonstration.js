@@ -149,7 +149,7 @@ function displayMedicationStatement(client) {
             medicationStatementBundle.entry.forEach(
                 entry => {
                     var medicationStatementDisplay = entry.resource.medicationCodeableConcept.coding[0].display;
-                    medicationStatementElement.innerHTML =+ '<li>' + medicationStatementDisplay + '</li>';
+                    medicationStatementElement.innerHTML += '<li>' + medicationStatementDisplay + '</li>';
                 });
         })
         .catch(console.error);
