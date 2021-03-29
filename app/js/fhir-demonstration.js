@@ -1,3 +1,19 @@
+// OMOPonFHIR supports the following 8 resources for SMART Apps (as of 3/29/2021, OMOPv5.3.1/FHIR STU3)
+// Condition
+// DocumentReference
+// Encounter
+// Medication Statement
+// Medication Request
+// Observation
+// Patient
+// Procedure
+
+// Need to add the following resources:
+// DocumentReference
+// Encounter
+// Medication Statement
+// Procedure (in process)
+
 function displayPatientDemographics(client) {
 
     // Request full Patient resource.
@@ -38,6 +54,20 @@ function displayPatientObservations(client) {
         .catch(console.error);
 }
 
+//function displayEncounter(client) {
+
+    //Andy: yikes
+    //Fetch the current encounter from the server
+
+//    client.patient.request("Encounter")
+//        .then(result => {
+//            document.getElementById('encounter').innerText = entry.resource.class.display;
+//            document.getElementById('encounter_start').innerText = entry.resource.period.start;
+//            document.getElementById('encounter_end').innerText = entry.resource.period.end;
+//        })
+//        .catch(console.error)
+//}
+
 
 function displayConditions(client) {
 
@@ -52,6 +82,23 @@ function displayConditions(client) {
                         conditionElement.innerHTML += '<li>' + conditionDisplay + '</li>';
                     });
             })
+        .catch(console.error);
+}
+
+function displayProcedures(client) {
+    // Andy: yikes
+    // Fetch the Patient's Procedures from the server
+
+    client.patient.request("Procedure")
+        .then(procedureBundle => {
+            //console.log(procedureBundle);
+            var procedureElement = document.getElementById('procedures');
+            procedureBundle.entry
+                .forEach(entry => {
+                    var procedureDisplay = entry.resource.code.coding[0].display;
+                    procedureElement.innerHTML += '<li>' + procedureDisplay + '</li>';
+                });
+        })
         .catch(console.error);
 }
 
@@ -91,6 +138,7 @@ function displayMedicationRequestsR4(client) {
         .then(document.getElementById('medorder-container').style.display = 'none')
         .catch(console.error);
 }
+
 
 // Quick helper function to find the (first?) instance of a HumanName with use of official, if none is
 // found returns the first name in the array as a fallback.

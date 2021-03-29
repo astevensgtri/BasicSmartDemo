@@ -23,12 +23,30 @@
     </p>
 </div>
 
+<!--<div>
+    <h2>Current Encounter</h2>
+    <sub><a href="http://www.hl7.org/fhir/stu3/encounter.html" target="_blank">Encounter FHIR Resource</a></sub>
+    <p>
+        <strong>Display:</strong><span id="encounter"></span><br>
+        <strong>Encounter Start Time:</strong><span id="encounter_start"></span><br>
+        <strong>Encounter End Time:</strong><span id="encounter_end"></span><br>
+    </p>
+</div>
+-->
+
+<div>
+    <h2>Procedures</h2>
+    <sub><a href="http://www.hl7.org/fhir/stu3/procedure.html" target="_blank">Procedure FHIR Resource</a></sub>
+    <ul id="procedures"></ul>
+</div>
+
 <div class="flex-container">
     <div class="flex-child">
         <h2>Conditions</h2>
         <sub><a href="https://www.hl7.org/fhir/condition.html" target="_blank">Condition FHIR Resource</a></sub>
         <ul id="conditions"></ul>
     </div>
+
 
     <div class="flex-child" id="medreq-container">
         <h2>Medication Requests (R4)</h2>
@@ -55,6 +73,8 @@
                 displayPatientDemographics(client);
                 displayPatientObservations(client);
                 displayConditions(client);
+                displayEncounter(client);
+                displayProcedures(client);
 
                 // Handle Medication based on FHIR Version
                 client.getFhirRelease()
