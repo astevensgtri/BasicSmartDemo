@@ -1,3 +1,13 @@
+// OMOPonFHIR supports the following 8 resources for SMART Apps (as of 3/29/2021, OMOPv5.3.1/FHIR STU3)
+// Condition
+// DocumentReference
+// Encounter
+// Medication Statement
+// Medication Request
+// Observation
+// Patient
+// Procedure
+
 function displayPatientDemographics(client) {
 
     // Request full Patient resource.
@@ -55,6 +65,22 @@ function displayConditions(client) {
         .catch(console.error);
 }
 
+function displayProcedures(client) {
+    // Andy yikes
+    // Fetch the Patient's Procedures from the server
+
+    client.patient.request("Procedure")
+        .then(procedureBundle => {
+            var procedureElement = document.getElementById('procedures');
+            procedureBundle.entry
+                .forEach(entry => {
+                    var procedureDisplay = entry.resource.code.coding[0].display;
+                    procedureElement.innerHTML += '<li>' + procedureDisplay + '</li>';
+                });
+        })
+        .catch(console.error);
+}
+
 
 function displayMedicationOrderDstu2(client) {
 
@@ -91,6 +117,12 @@ function displayMedicationRequestsR4(client) {
         .then(document.getElementById('medorder-container').style.display = 'none')
         .catch(console.error);
 }
+
+// Need to add the following resources:
+// DocumentReference
+// Encounter
+// Medication Statement
+// Procedure
 
 // Quick helper function to find the (first?) instance of a HumanName with use of official, if none is
 // found returns the first name in the array as a fallback.
