@@ -61,7 +61,7 @@ function displayEncounter(client) {
 
     client.patient.request("Encounter")
         .then(result => {
-            document.getElementById('encounter').innerText = result.entry[0].resource.class.display;
+            document.getElementById('encounter').innerText = result.entry[0].resource.type[0].text;
             document.getElementById('encounter_start').innerText = result.entry[0].resource.period.start;
             document.getElementById('encounter_end').innerText = result.entry[0].resource.period.end;
         })
