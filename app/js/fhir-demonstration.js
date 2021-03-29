@@ -10,9 +10,9 @@
 
 // Need to add the following resources:
 // DocumentReference
-// Encounter
+// Encounter (done)
 // Medication Statement
-// Procedure (in process)
+// Procedure (done)
 
 function displayPatientDemographics(client) {
 
@@ -56,7 +56,7 @@ function displayPatientObservations(client) {
 
 function displayEncounter(client) {
 
-    //Andy: yikes
+    //Andy: nice
     //Fetch the current encounter from the server
 
     client.patient.request("Encounter")
@@ -86,7 +86,7 @@ function displayConditions(client) {
 }
 
 function displayProcedures(client) {
-    // Andy: yikes
+    // Andy: nice
     // Fetch the Patient's Procedures from the server
 
     client.patient.request("Procedure")
@@ -136,6 +136,22 @@ function displayMedicationRequestsR4(client) {
         })
         // Then hide the Medication Statement container as we aren't using it.
         .then(document.getElementById('medorder-container').style.display = 'none')
+        .catch(console.error);
+}
+
+function displayMedicationStatement(client) {
+
+    //Fetch the MedicationStatement from the server for this patient.
+
+    client.patient.request("MedicationStatement")
+        .then(medicationStatementBundle => {
+            var medicationStatementElement = document.getElementById('medicationStatement');
+            medicationStatementBundle.entry.forEach(
+                entry => {
+                    var medicationStatementDisplay = entry.resource.medicationCodeableConcept.coding[0].display;
+                    medicationStatementElement.innerHTML =+ '<li>' + medicationStatementDisplay + '</li>';
+                });
+        })
         .catch(console.error);
 }
 

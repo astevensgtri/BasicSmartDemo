@@ -7,7 +7,7 @@
 
 </head>
 <body>
-<h1>Basic SMART Sample</h1>
+<h1>Testing SMARTonOMOPonFHIR Resources</h1>
 
 <div>
     <h2>Patient Demographics and Observations</h2>
@@ -47,6 +47,11 @@
         <ul id="conditions"></ul>
     </div>
 
+    <div class="flex-child">
+        <h2>Medications Currently Being Taken</h2>
+        <sub><a href="https://www.hl7.org/fhir/medicationstatement.html" target="_blank">MedicationStatement FHIR Resource</a></sub>
+        <ul id="medicationStatement"></ul>
+    </div>
 
     <div class="flex-child" id="medreq-container">
         <h2>Medication Requests (R4)</h2>
@@ -75,6 +80,7 @@
                 displayConditions(client);
                 displayEncounter(client);
                 displayProcedures(client);
+                displayMedicationStatement(client);
 
                 // Handle Medication based on FHIR Version
                 client.getFhirRelease()
