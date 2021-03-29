@@ -8,6 +8,12 @@
 // Patient
 // Procedure
 
+// Need to add the following resources:
+// DocumentReference
+// Encounter
+// Medication Statement
+// Procedure (in process)
+
 function displayPatientDemographics(client) {
 
     // Request full Patient resource.
@@ -46,6 +52,20 @@ function displayPatientObservations(client) {
                 document.getElementById('pt_height').innerText = getValueAndUnit(result.entry[0].resource.valueQuantity);
             })
         .catch(console.error);
+}
+
+function displayEncounter(client) {
+
+    //Andy yikes
+    //Fetch the current encounter from the server
+
+    client.patient.request("Encounter")
+        .then(result => {
+            document.getElementById('encounter').innerText = entry.resource.class.display;
+            document.getElementById('encounter_start').innerText = entry.resource.period.start;
+            document.getElementById('encounter_end').innerText = entry.resource.period.end;
+        })
+        .catch(console.error)
 }
 
 
@@ -118,11 +138,6 @@ function displayMedicationRequestsR4(client) {
         .catch(console.error);
 }
 
-// Need to add the following resources:
-// DocumentReference
-// Encounter
-// Medication Statement
-// Procedure
 
 // Quick helper function to find the (first?) instance of a HumanName with use of official, if none is
 // found returns the first name in the array as a fallback.
