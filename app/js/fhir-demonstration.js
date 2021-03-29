@@ -91,6 +91,7 @@ function displayProcedures(client) {
 
     client.patient.request("Procedure")
         .then(procedureBundle => {
+            console.log(procedureBundle);
             var procedureElement = document.getElementById('procedures');
             procedureBundle.entry
                 .forEach(entry => {
