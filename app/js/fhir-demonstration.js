@@ -54,19 +54,19 @@ function displayPatientObservations(client) {
         .catch(console.error);
 }
 
-//function displayEncounter(client) {
+function displayEncounter(client) {
 
     //Andy: yikes
     //Fetch the current encounter from the server
 
-//    client.patient.request("Encounter")
-//        .then(result => {
-//            document.getElementById('encounter').innerText = entry.resource.class.display;
-//            document.getElementById('encounter_start').innerText = entry.resource.period.start;
-//            document.getElementById('encounter_end').innerText = entry.resource.period.end;
-//        })
-//        .catch(console.error)
-//}
+    client.patient.request("Encounter")
+        .then(result => {
+            document.getElementById('encounter').innerText = entry.resource.class.display;
+            document.getElementById('encounter_start').innerText = entry.resource.period.start;
+            document.getElementById('encounter_end').innerText = entry.resource.period.end;
+        })
+        .catch(console.error)
+}
 
 
 function displayConditions(client) {
@@ -91,6 +91,7 @@ function displayProcedures(client) {
 
     client.patient.request("Procedure")
         .then(procedureBundle => {
+            console.log(procedureBundle)
             var procedureElement = document.getElementById('procedures');
             procedureBundle.entry
                 .forEach(entry => {
