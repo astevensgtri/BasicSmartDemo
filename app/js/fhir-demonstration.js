@@ -56,7 +56,7 @@ function displayPatientObservations(client) {
 
 function displayEncounter(client) {
 
-    //Andy yikes
+    //Andy: yikes
     //Fetch the current encounter from the server
 
     client.patient.request("Encounter")
@@ -86,7 +86,7 @@ function displayConditions(client) {
 }
 
 function displayProcedures(client) {
-    // Andy yikes
+    // Andy: yikes
     // Fetch the Patient's Procedures from the server
 
     client.patient.request("Procedure")
