@@ -8,10 +8,10 @@
 <script src="https://cdn.jsdelivr.net/npm/fhirclient@2.3.10/build/fhir-client.js"></script>
 <script>
     FHIR.oauth2.authorize({
-        'client_id': '89ee9b6d-f214-4952-98d0-e6dbf8c9dd15',
+        'client_id': 'ce7b8f45-7775-41b4-849e-6b6e5338f234',
         // R4 scope including MedicationRequest. To use DSTU2 scopes, comment out the line below and uncomment the line
         // directly following it containing the Medication scope.
-        'scope': 'patient/Patient.read patient/Condition.read patient/MedicationRequest.read patient/Observation.read launch online_access openid profile'
+        'scope': 'patient/Patient.read patient/Condition.read patient/MedicationRequest.read patient/Observation.read patient/Encounter.read patient/Procedure.read patient/MedicationStatement.read patient/DocumentReference.read launch online_access openid profile'
         //'scope':  'patient/Patient.read patient/Condition.read patient/Medication.read patient/Observation.read launch online_access openid profile'
 
     });
