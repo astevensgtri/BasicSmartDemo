@@ -11,7 +11,7 @@
 // Need to add the following resources:
 // DocumentReference
 // Encounter (done)
-// Medication Statement
+// Medication Statement (done)
 // Procedure (done)
 
 function displayPatientDemographics(client) {
@@ -150,6 +150,22 @@ function displayMedicationStatement(client) {
                 entry => {
                     var medicationStatementDisplay = entry.resource.medicationCodeableConcept.coding[0].display;
                     medicationStatementElement.innerHTML += '<li>' + medicationStatementDisplay + '</li>';
+                });
+        })
+        .catch(console.error);
+}
+
+function displayDocuments(client) {
+
+    //Fetch the DocumentReference resource from the server for this patient
+
+    client.patient.request("DocumentReference")
+        .then(documentBundle => {
+            var documentElement = document.getElementById('documentReference');
+            documentBundle.entry.forEach(
+                entry => {
+                    var documentDisplay = entry.resource.description;
+                    documentElement.innerHTML += '<li>'+ documentDisplay + '</li>';
                 });
         })
         .catch(console.error);

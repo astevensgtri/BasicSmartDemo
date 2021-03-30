@@ -81,13 +81,14 @@
                 displayEncounter(client);
                 displayProcedures(client);
                 displayMedicationStatement(client);
+                displayDocuments(client);
 
                 // Handle Medication based on FHIR Version
                 client.getFhirRelease()
                     .then(version => {
                             if (version === 2) {
                                 displayMedicationOrderDstu2(client);
-                            } else if (version === 4) {
+                            } else if (version === 4 || version === 3) {
                                 displayMedicationRequestsR4(client);
                             } else {
                                 throw "Unsupported FHIR Version";
