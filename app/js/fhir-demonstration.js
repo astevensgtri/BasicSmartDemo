@@ -135,10 +135,10 @@ function displayMedicationRequestsR4(client) {
                 entry => {
                     try{var medicationRequestDisplay = entry.resource.medicationCodeableConcept.coding[0].display;}
                     catch(err){
-                        //var medicationRequestDisplay = entry.resource.medicationReference.reference;
-                        //Started trying to query what the medication is rather than the reference, is not working at the moment
-                        var medicationReference = entry.resource.medicationReference.reference;
-                        var medicationRequestDisplay = getMedicationFromReference(client, medicationReference)
+                        var medicationRequestDisplay = entry.resource.medicationReference.reference;
+                        //Cannot look up medication like below, Medication resource is not in user scope
+                        //var medicationReference = entry.resource.medicationReference.reference;
+                        //var medicationRequestDisplay = getMedicationFromReference(client, medicationReference)
                     }
                     medicationRequestElement.innerHTML += '<li>' + medicationRequestDisplay + '</li>';
                 });
