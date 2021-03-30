@@ -165,7 +165,7 @@ function displayDocuments(client) {
             var documentElement = document.getElementById('documents');
             documentBundle.entry.forEach(
                 entry => {
-                    var documentDisplay = entry.resource.type.text;
+                    var documentDisplay = entry.resource.type.coding[0].display;
                     documentElement.innerHTML += '<li>'+ documentDisplay + '</li>';
                 });
         })
