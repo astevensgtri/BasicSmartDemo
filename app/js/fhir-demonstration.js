@@ -134,7 +134,10 @@ function displayMedicationRequestsR4(client) {
             medicationRequestBundle.entry.forEach(
                 entry => {
                     try{var medicationRequestDisplay = entry.resource.medicationCodeableConcept.coding[0].display;}
-                    catch(err){var medicationRequestDisplay = entry.resource.medicationReference.reference;}
+                    catch(err){
+                        var medicationReference = entry.resource.medicationReference.reference;
+                        var medicationRequestDisplay = getMedicationFromReference(client, medicationReference)
+                    }
                     medicationRequestElement.innerHTML += '<li>' + medicationRequestDisplay + '</li>';
                 });
         })
@@ -206,4 +209,12 @@ function getValueAndUnit(valueQuantity) {
     var value = valueQuantity.value;
     var unit = valueQuantity.unit;
     return value + " " + unit;
+}
+
+// Helper function to get medication reference
+function getMedicationFromReference(client, medicationReference) {
+    client.patient.request(medicationReference)
+        .then(medication => {
+            return medication.entry[0].code.coding[0].display;})
+        .catch(console.error);
 }
