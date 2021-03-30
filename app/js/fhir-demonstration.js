@@ -43,19 +43,18 @@ function displayPatientObservations(client) {
 
     client.patient.request("Observation?code=http://loinc.org|29463-7")
         .then(result => {
-                document.getElementById('pt_weight').innerText = getValueAndUnit(result.entry[0].resource.valueQuantity);
+                try{document.getElementById('pt_weight').innerText = getValueAndUnit(result.entry[0].resource.valueQuantity);}
+                catch(err){document.getElementById('pt_weight').innerText = 'None Found';}
             })
-        .catch(console.error){
-            document.getElementById('pt_weight').innerText = 'None Found';
-        };
+        .catch(console.error);
+            
 
     client.patient.request("Observation?code=http://loinc.org|8302-2")
         .then(result => {
-                document.getElementById('pt_height').innerText = getValueAndUnit(result.entry[0].resource.valueQuantity);
+                try{document.getElementById('pt_height').innerText = getValueAndUnit(result.entry[0].resource.valueQuantity);}
+                catch(err){document.getElementById('pt_height').innerText = 'None Found';}
             })
-        .catch(console.error){
-            document.getElementById('pt_height').innerText = 'None Found';
-        };
+        .catch(console.error);
 }
 
 function displayEncounter(client) {
@@ -134,7 +133,8 @@ function displayMedicationRequestsR4(client) {
             var medicationRequestElement = document.getElementById('medicationRequests');
             medicationRequestBundle.entry.forEach(
                 entry => {
-                    var medicationRequestDisplay = entry.resource.medicationCodeableConcept.coding[0].display;
+                    try{var medicationRequestDisplay = entry.resource.medicationCodeableConcept.coding[0].display;}
+                    catch(err){var medicatioRequestDisplay = entry.resource.medicationReference.reference;}
                     medicationRequestElement.innerHTML += '<li>' + medicationRequestDisplay + '</li>';
                 });
         })
