@@ -135,10 +135,10 @@ function displayMedicationRequestsR4(client) {
                 entry => {
                     try{var medicationRequestDisplay = entry.resource.medicationCodeableConcept.coding[0].display;}
                     catch(err){
-                        var medicationRequestDisplay = entry.resource.medicationReference.reference;
+                        //var medicationRequestDisplay = entry.resource.medicationReference.reference;
                         //Started trying to query what the medication is rather than the reference, is not working at the moment
-                        //var medicationReference = entry.resource.medicationReference.reference;
-                        //var medicationRequestDisplay = getMedicationFromReference(client, medicationReference)
+                        var medicationReference = entry.resource.medicationReference.reference;
+                        var medicationRequestDisplay = getMedicationFromReference(client, medicationReference)
                     }
                     medicationRequestElement.innerHTML += '<li>' + medicationRequestDisplay + '</li>';
                 });
@@ -215,7 +215,7 @@ function getValueAndUnit(valueQuantity) {
 
 // Helper function to get medication reference
 function getMedicationFromReference(client, medicationReference) {
-    client.patient.request(medicationReference)
+    client.request(medicationReference)
         .then(medication => {
             return medication.code.coding[0].display;})
         .catch(console.error);
