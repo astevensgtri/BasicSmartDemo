@@ -97,6 +97,7 @@
                             } else if (version === 4 || version === 3) {
                                 displayMedicationRequestsR4(client);
                             } else {
+                                console.log(version);
                                 throw "Unsupported FHIR Version";
                             }
                         })
