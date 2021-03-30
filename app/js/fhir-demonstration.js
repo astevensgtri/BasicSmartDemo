@@ -45,13 +45,17 @@ function displayPatientObservations(client) {
         .then(result => {
                 document.getElementById('pt_weight').innerText = getValueAndUnit(result.entry[0].resource.valueQuantity);
             })
-        .catch(console.error);
+        .catch(console.error){
+            document.getElementById('pt_weight').innerText = 'None Found';
+        };
 
     client.patient.request("Observation?code=http://loinc.org|8302-2")
         .then(result => {
                 document.getElementById('pt_height').innerText = getValueAndUnit(result.entry[0].resource.valueQuantity);
             })
-        .catch(console.error);
+        .catch(console.error){
+            document.getElementById('pt_height').innerText = 'None Found';
+        };
 }
 
 function displayEncounter(client) {
