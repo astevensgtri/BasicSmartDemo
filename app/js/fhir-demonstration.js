@@ -135,8 +135,9 @@ function displayMedicationRequestsR4(client) {
                 entry => {
                     try{var medicationRequestDisplay = entry.resource.medicationCodeableConcept.coding[0].display;}
                     catch(err){
-                        var medicationReference = entry.resource.medicationReference.reference;
-                        var medicationRequestDisplay = getMedicationFromReference(client, medicationReference)
+                        var medicationRequestDisplay = entry.resource.medicationReference.reference;
+                        //Started trying to query what the medication is rather than the reference, is not working at the moment
+                        //var medicationRequestDisplay = getMedicationFromReference(client, medicationReference)
                     }
                     medicationRequestElement.innerHTML += '<li>' + medicationRequestDisplay + '</li>';
                 });
