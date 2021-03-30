@@ -161,7 +161,7 @@ function displayDocuments(client) {
 
     client.patient.request("DocumentReference")
         .then(documentBundle => {
-            var documentElement = document.getElementById('documentReference');
+            var documentElement = document.getElementById('documents');
             documentBundle.entry.forEach(
                 entry => {
                     var documentDisplay = entry.resource.description;
